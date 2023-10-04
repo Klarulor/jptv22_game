@@ -1,13 +1,35 @@
+import java.io.*;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static java.lang.Integer.parseInt;
 
 public class App {
-    public void run(){
+    public void run() throws IOException {
+        File yourFile = new File("balance.txt");
+        if(!yourFile.exists()){
+            yourFile.createNewFile(); // if file already exists will do nothing
+            FileOutputStream oFile = new FileOutputStream(yourFile, false);
+        }
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("balance.txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        Path fileName = Paths.get("balance.txt");
+        String line = Files.readAllLines(fileName).get(0);
+
         int balance = 10;
+        if(line != null){
+            balance = parseInt(line);
+        }
         int bet = 1;
-        System.out.println("Спасибо за пополнение баланса! Ваш баланс составляет 10 евро-монет");
+        System.out.println("Ваш баланс составляет "+balance+" евро-монет");
         Random rnd = new Random();
         boolean isRunning = true;
         do{
@@ -38,6 +60,8 @@ public class App {
                         System.out.println("Неправильный ввод. Пропишите число ещё раз: ");
                     }
                 }
+
+
                 if(randomized == num){
                     System.out.println("Вы победили!");
                     balance += bet;
@@ -60,5 +84,8 @@ public class App {
                 System.out.println("После поплнения ваш баланс составляет "+balance+" евро-монет");
             }
         }while(isRunning);
+        FileWriter myWriter = new FileWriter("balance.txt");
+        myWriter.write(balance + "");
+        myWriter.close();
     }
 }
