@@ -1,0 +1,1 @@
+java -jar ./src/out/artifacts/Game_jar/Game.jar
